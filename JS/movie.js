@@ -89,7 +89,7 @@ function displayMovie() {
                 <hr />
                 <div class="extra-info">
                     <div>
-                        <img src="../images/imdbpro.png" />
+                        <img src="./images/imdbpro.png" />
                     </div>
                     <a href="" class="name">
                         See production, box office & company info
@@ -97,7 +97,7 @@ function displayMovie() {
                 </div>
                 <br/>
                 <button class="watch-btn" id=${imdbID}>
-                    <img src="../images//video.png" />
+                    <img src="./images/video.png" />
                     Add To Watchlist
                 </button>
             </div>
