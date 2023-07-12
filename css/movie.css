@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Narnoor&family=Roboto+Slab:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Narnoor', serif;
+
+}
+
+body {
+    background-image: linear-gradient(to left, #140d11, #1a1619, #1f1c21, #252429, #2a2b31, #2c2c31, #2d2c32, #2f2d32, #2c282b, #282324, #231e1e, #1d1a19);
+    height: 100vh;
+    /* overflow: hidden; */
+}
+
+
+
+/******************************************************** main container ******************************************/
+.container {
+    margin-top: 80px;
+    color: white;
+    width: 100%;
+}
+
+/* col 1 */
+.banner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.title {
+    font-family: 'Roboto Slab', serif;
+    font-size: 2.8rem;
+    text-align: start;
+}
+
+.banner p {
+    color: rgb(209, 203, 203);
+}
+
+.poster {
+    height: 400px;
+}
+
+.poster img {
+    height: 100%;
+    width:95%;
+    object-fit: contain;
+}
+
+
+/* col 2 */
+.movie-data {
+    position: relative;
+    top: 40px;
+    height: fit-content;
+}
+
+.movie-type {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 350px;
+    padding: 0;
+}
+
+.movie-type li {
+    font-family: 'Roboto Slab', serif;
+    padding: 2px 20px;
+    border-radius: 20px;
+    border: 1px solid white;
+    background-color: transparent;
+    transform: scale(1);
+    transition: all 0.1s ease-in-out;
+}
+
+.movie-type li:hover {
+    background-color: #140d11;
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.movie-data .text {
+    text-align: justify;
+    padding: 20px 0;
+}
+
+.movie-data .extra-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.movie-data .extra-info .name {
+    margin: 0;
+    color: #5699EE;
+    font-size: 1.1rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+}
+
+.movie-data .extra-info .designation {
+    width: 110px;
+    margin: 0;
+    text-align: start;
+    font-size: 1.2rem;
+    font-family: 'Roboto Slab', serif;
+}
+
+.movie-data .extra-info div {
+    height: 20px;
+    margin-right: 35px;
+}
+
+.movie-data .extra-info div img {
+    height: 100%;
+    object-fit: contain;
+}
+
+.dot {
+    color: white;
+    padding: 0 8px;
+    position: relative;
+    bottom: 4px;
+}
+
+.watch-btn {
+    height: 50px;
+    padding: 5px 20px;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: white;
+    transform: scale(1);
+    transition: all 0.1s ease-in-out;
+}
+
+.watch-btn:hover {
+    background-color: black;
+    transform: scale(1.1);
+}
+
+.watch-btn img {
+    height: 100%;
+    object-fit: contain;
+}
+
+
+/******************************************************* Responsive css ***********************************************/
+@media screen and (max-width:1000px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .watch-btn {
+        right: 80px;
+        margin-bottom: 30px;
+    }
+}
+
+
+@media screen and (max-width:760px) {
+    .poster {
+        height: 300px;
+    }
+ 
+    .movie-data {
+        padding: 0;
+    }
+
+    .movie-type {
+        width: 200px;
+    }
+    .navbar-brand{
+        margin: 0;
+    }
+    #watchlist{
+        width: 25%;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .mybtn {
+        display: block;
+    }
+
+    .navbar {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .navbar-brand .logo1 {
+        display: none;
+    }
+
+    #watchlist {
+        display: none;
+    }
+
+    .navbar-brand {
+        display: none !important;
+    }
+
+    .poster {
+        height: 500px;
+    }
+
+    .movie-data {
+        padding: 0 40px;
+    }
+
+    #scroll-text {
+        width: 80%;
+    }
+
+}
+
+
+
+/********************************************************offcanvas *****************************************************************/
+
+.offcanvas {
+    z-index: 20000;
+}
+
+.canvas-nav {
+    list-style-type: none;
+}
+
+.canvas-nav li {
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.canvas-nav li:hover {
+    background-color: rgb(111, 134, 155);
+    cursor: pointer;
+}
+
+.canvas-nav li a {
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: black;
+    display: flex;
+    align-items: center;
+}
+
+.canvas-nav li a p {
+    margin-left: 15px;
+    position: relative;
+    top: 6px;
+}
+
+.canvas-nav li a span {
+    position: relative;
+    bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    font-weight: 600;
+    background-color: yellow;
+    color: black;
+    padding: 3px;
+}
