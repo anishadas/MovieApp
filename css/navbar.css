@@ -20,11 +20,10 @@
 }
 
 .navbar-brand .logo1 {
-    height: 40px;
-    background-color: white;
-    border-radius: 50%;
+    height: 45px;
     position: relative;
     left: 10px;
+    cursor: pointer;
 }
 
 .navbar-brand .logo2 {

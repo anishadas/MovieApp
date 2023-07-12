@@ -1,6 +1,6 @@
 let myWatchList = JSON.parse(localStorage.getItem("WATCHLIST")) || [];
 const watchlist_el = document.getElementById("my-watchlist");
-const count = document.getElementById("count");
+const count3 = document.getElementById("count3");
 
 // for remove button
 document.addEventListener('click', (e) => {
@@ -45,12 +45,14 @@ function displayList() {
             `
         });
         watchlist_el.innerHTML = str;
-        count.innerHTML = myWatchList.length;
+        
     }
     else {
         watchlist_el.innerHTML = `<h1>No items in watchlist</h1>`;
-        count.innerHTML = myWatchList.length;
+        
     }
+    count.innerHTML = myWatchList.length;
+    count3.innerHTML = myWatchList.length;
 }
 
 displayList();

@@ -3,7 +3,11 @@ const mycards = document.querySelector("#my-cards");
 const input = document.getElementById("input");
 const count = document.getElementById("count");
 
-const URL = 'http://www.omdbapi.com/?apikey=c997ccc2';
+// for count in small screens using off canvas component
+const count1 = document.getElementById("count1");
+
+
+const URL = 'https://www.omdbapi.com/?apikey=c997ccc2';
 
 let watchlist = JSON.parse(localStorage.getItem("WATCHLIST")) || [];
 
@@ -56,6 +60,7 @@ function handleClickEvents(e) {
 
 function renderMovies() {
     count.innerHTML = watchlist.length;
+    count1.innerHTML = watchlist.length;
     let moviesList = JSON.parse(localStorage.getItem("MOVIELIST")) || [];
     let str = "";
     if (moviesList.length) {
@@ -115,6 +120,8 @@ function addToWatchList(id) {
         watchlist.push(movie[0]);
     }
     count.innerHTML = watchlist.length;
+    count1.innerHTML = watchlist.length;
+
     localStorage.setItem("WATCHLIST", JSON.stringify(watchlist));
 }
 
@@ -126,6 +133,8 @@ function removeFromWatchList(id) {
     }
     watchlist = watchlist.filter(movie => movie.imdbID != id)
     count.innerHTML = watchlist.length;
+    count1.innerHTML = watchlist.length;
+    
     localStorage.setItem("WATCHLIST", JSON.stringify(watchlist));
 }
 

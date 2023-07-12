@@ -1,7 +1,9 @@
-// const movie = JSON.parse(localStorage.getItem("MOVIE")) || [];
+
 const myWatchList = JSON.parse(localStorage.getItem("WATCHLIST")) || [];
-// let myMovieList = JSON.parse(localStorage.getItem("MOVIELIST")) || [];
 const addMovie = document.querySelector("#movie");
+// for count in small screens using off canvas component
+const count2 = document.getElementById("count2");
+
 
 
 
@@ -9,18 +11,18 @@ const addMovie = document.querySelector("#movie");
 // getting data using id from omdb
 async function showMovie(id) {
     // console.log("hi",id)
-    const URL = 'http://www.omdbapi.com/?apikey=c997ccc2';
+    const URL = 'https://www.omdbapi.com/?apikey=c997ccc2';
     const response = await fetch(`${URL}&i=${id}`);
     const mymovie = await response.json();
     console.log(mymovie);
-    localStorage.setItem("MOVIE", JSON.stringify([mymovie]));
     window.location.href = './movie.html';
+    localStorage.setItem("MOVIE", JSON.stringify([mymovie]));
 }
 
 // displaying data on a movie
 function displayMovie() {
     const movie = JSON.parse(localStorage.getItem("MOVIE")) || [];
-    console.log("hello",movie);
+    count2.innerHTML = myWatchList.length;
     let str = "";
     if (movie.length) {
         const { Actors, Director, Genre, Language, Plot, Poster, Released, Title, Writer,imdbID } = movie[0];
@@ -135,5 +137,6 @@ function addWatchList() {
         myWatchList.push(movie[0]);
     }
     count.innerHTML = myWatchList.length;
+    count2.innerHTML = myWatchList.length;
     localStorage.setItem("WATCHLIST", JSON.stringify(myWatchList));
 }
