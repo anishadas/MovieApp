@@ -88,13 +88,13 @@ function renderMovies() {
             let myButtn;
             if (isPresentWatchlist) {
                 myButtn = `  <button class="butn" title="remove from watchlist">
-                        <img src="./images/remove.png" class="remove-watchlist" id={movie.id} />
-                        <span>Remove from watchlist</span>
+                        <img src="./images/remove.png" class="remove-watchlist" id=${movie.id} />
+                        <span class="remove-watchlist" id=${movie.id}>Remove from watchlist</span>
                     </button>`
             } else {
                 myButtn = `<button class="butn" title="add to watchlist">
-                        <img src="./images/video.png" class="add-watchlist" id={movie.id} />
-                        <span>Add to watchlist</span>
+                        <img src="./images/video.png" class="add-watchlist" id=${movie.id} />
+                        <span class="add-watchlist" id=${movie.id}>Add to watchlist</span>
                     </button>`
             }
 
@@ -122,7 +122,6 @@ function renderMovies() {
                     </div>
                 </div>
             </div>`;
-            isPresentWatchlist = false;
         })
         mycards.innerHTML = str;
     }
@@ -136,36 +135,23 @@ function addToWatchList(id) {
     // getting the movie
     let moviesList = JSON.parse(localStorage.getItem("MOVIELIST")) || [];
     let movie = moviesList.filter(movie => movie.id == id);
-
-    // checking if movie already in watchList
-    let isPresent = false;
-    watchlist.map(item => {
-        if (item.id == movie[0].id) {
-            isPresent = true;
-            return;
-        }
-    });
-    if (!isPresent) {
-        watchlist.push(movie[0]);
-    }
+    
+    watchlist.push(movie[0]);
     count.innerHTML = watchlist.length;
     count1.innerHTML = watchlist.length;
 
     localStorage.setItem("WATCHLIST", JSON.stringify(watchlist));
+    renderMovies();
 }
 
 // remove from watchlist
 function removeFromWatchList(id) {
-    // getting the movie from watchlist
-    let movie = watchlist.filter(movie => movie.id == id);
-    if (movie.length == 0) {
-        alert("movie not added to watchlist yet.")
-    }
     watchlist = watchlist.filter(movie => movie.id != id)
     count.innerHTML = watchlist.length;
     count1.innerHTML = watchlist.length;
 
     localStorage.setItem("WATCHLIST", JSON.stringify(watchlist));
+    renderMovies();
 }
 
 
