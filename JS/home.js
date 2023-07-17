@@ -7,41 +7,49 @@ const count = document.getElementById("count");
 const count1 = document.getElementById("count1");
 
 
-const URL = 'https://www.omdbapi.com/?apikey=c997ccc2';
+const URL = 'https://api.themoviedb.org/3/movie/popular?api_key=458184493cc57d1740b126c2cc6f9f72&page=1';
 
 let watchlist = JSON.parse(localStorage.getItem("WATCHLIST")) || [];
 
-let searchTerm = "hum"
 
-async function getData(URL, searchTerm) {
+// getting data from api
+async function getData(query) {
     let list = [];
-    let page = 1;
-    console.log(`${URL}&s=${searchTerm}&type=movie&page=${page}`)
-    while (page <= 2) {
-        const response = await fetch(`${URL}&s=${searchTerm}&type=movie&page=${page}`);
-        const movies = await response.json();
-        // console.log(movies.Search)
-        movies.Search.forEach((movie) => list.push(movie));
-        page++
+    let response;
+    // getting movies data based on search query
+    if (query) {
+        let SEARCH_URL = "https://api.themoviedb.org/3/search/movie?query=" + query + "&api_key=458184493cc57d1740b126c2cc6f9f72&language=en-US&page=1"
+        response = await fetch(SEARCH_URL)
     }
+    // getting popular movies on 1st render
+    else {
+        console.log("hi")
+        response = await fetch(URL);
+    }
+    const movies = await response.json();
+    movies.results.forEach((movie) => list.push(movie));
     localStorage.setItem("MOVIELIST", JSON.stringify(list));
     renderMovies();
 }
+getData("")
 
 
-getData(URL, searchTerm)
+function handleChangeEvent(e) {
+    let search = e.target.value;
+    console.log(search)
+    getData(search);
+}
 
+// listening change in input in search bar
+input.addEventListener("input", handleChangeEvent);
 // listening for all click events
 document.addEventListener("click", handleClickEvents);
 
-function handleClickEvents(e) {
 
-    if (e.target.id == "search") {
-        e.preventDefault();
-        let search = input.value;
-        getData(URL, search);
-        input.value = "";
-    }
+
+
+function handleClickEvents(e) {
+    console.log(e.target)
     if (e.target.className == "add-watchlist") {
         e.preventDefault();
         let id = e.target.id;
@@ -51,50 +59,71 @@ function handleClickEvents(e) {
         let id = e.target.id;
         removeFromWatchList(id);
     }
-    if (e.target.className == "card-img-top") {
+    if (e.target.className == "card-img-text" || e.target.className == "fa-solid fa-film" || e.target.className == "overlay" ) {
         let id = e.target.id;
         showMovie(id);
 
     }
 }
 
+// dsplaying the UI
 function renderMovies() {
     count.innerHTML = watchlist.length;
     count1.innerHTML = watchlist.length;
     let moviesList = JSON.parse(localStorage.getItem("MOVIELIST")) || [];
+    let watchList = JSON.parse(localStorage.getItem("WATCHLIST")) || [];
     let str = "";
     if (moviesList.length) {
-        moviesList.map((movie, index) => {
-            let id = movie.imdbID;
-            // console.log(id)
+        moviesList.map((movie) => {
+            let id = movie.id;
+            let isPresentWatchlist = false;
+            watchList.map(movie => {
+                if (movie.id == id) {
+                    isPresentWatchlist = true;
+                    return;
+                }
+            });
+
+            // creating dynamic button based on movie is present in watchlist or not
+            let myButtn;
+            if (isPresentWatchlist) {
+                myButtn = `  <button class="butn" title="remove from watchlist">
+                        <img src="./images/remove.png" class="remove-watchlist" id={movie.id} />
+                        <span>Remove from watchlist</span>
+                    </button>`
+            } else {
+                myButtn = `<button class="butn" title="add to watchlist">
+                        <img src="./images/video.png" class="add-watchlist" id={movie.id} />
+                        <span>Add to watchlist</span>
+                    </button>`
+            }
+
+            let src = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path;
             str += `
             <div class="card" style="width: 18rem;">
                 <div class="image">
-                    <img src=${movie.Poster} class="card-img-top" alt="..."   id=${id} />
+                    <img src=${src}  alt="..." />
+                    <div class="overlay" id=${id}>
+                        <p class="card-img-text" id=${id}>click for more</p>
+                        <i class="fa-solid fa-film" id=${id}></i>
+                    </div>
                 </div>
                 <div class="card-body">
                     <p class="imdbRating">
                         <i class="fa-solid fa-star"></i>
-                        7.6
+                        ${movie.vote_average}
                     </p>
-                    <h5 class="card-title">${movie.Title}</h5>
+                    <h5 class="card-title">${movie.title}</h5>
                     <p class="card-text">
-                        <span>Released on: ${movie.Year}</span>
-                        <span>Type: ${movie.Type}</span>
+                        <span>Released on: ${movie.release_date}</span>
                     </p>
                     <div class="actions">
-                        <button class="butn" title="remove from watchlist">
-                            <img src="./images/remove.png"  class="remove-watchlist" id=${movie.imdbID} />
-                        </button>
-                        
-                        <button class="butn" title="add to watchlist">
-                            <img src="./images/video.png" class="add-watchlist" id=${movie.imdbID} />
-                        </button>
+                    ${myButtn}
                     </div>
                 </div>
             </div>`;
+            isPresentWatchlist = false;
         })
-        console.log("str", mycards)
         mycards.innerHTML = str;
     }
     else {
@@ -102,16 +131,16 @@ function renderMovies() {
     }
 }
 
-
+// adding to faourites/watchlist
 function addToWatchList(id) {
     // getting the movie
     let moviesList = JSON.parse(localStorage.getItem("MOVIELIST")) || [];
-    let movie = moviesList.filter(movie => movie.imdbID == id);
+    let movie = moviesList.filter(movie => movie.id == id);
 
     // checking if movie already in watchList
     let isPresent = false;
     watchlist.map(item => {
-        if (item.imdbID == movie[0].imdbID) {
+        if (item.id == movie[0].id) {
             isPresent = true;
             return;
         }
@@ -125,26 +154,20 @@ function addToWatchList(id) {
     localStorage.setItem("WATCHLIST", JSON.stringify(watchlist));
 }
 
+// remove from watchlist
 function removeFromWatchList(id) {
     // getting the movie from watchlist
-    let movie = watchlist.filter(movie => movie.imdbID == id);
+    let movie = watchlist.filter(movie => movie.id == id);
     if (movie.length == 0) {
         alert("movie not added to watchlist yet.")
     }
-    watchlist = watchlist.filter(movie => movie.imdbID != id)
+    watchlist = watchlist.filter(movie => movie.id != id)
     count.innerHTML = watchlist.length;
     count1.innerHTML = watchlist.length;
-    
+
     localStorage.setItem("WATCHLIST", JSON.stringify(watchlist));
 }
 
-// getting data using id from omdb
-async function showMovie(id) {
-    const URL = 'http://www.omdbapi.com/?apikey=c997ccc2';
-    const response = await fetch(`${URL}&i=${id}`);
-    const movie = await response.json();
-    localStorage.setItem("MOVIE", JSON.stringify([movie]));
-}
 
 // tool tips from bootstrap
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');

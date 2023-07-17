@@ -4,102 +4,135 @@ const addMovie = document.querySelector("#movie");
 // for count in small screens using off canvas component
 const count2 = document.getElementById("count2");
 
-
-
+// event listener to add the move to watchlist
+document.addEventListener('click', (e) => {
+    if (e.target.className == "watch-btn") {
+        let id = e.target.id;
+        addWatchList();
+    }
+})
 
 
 // getting data using id from omdb
 async function showMovie(id) {
-    // console.log("hi",id)
-    const URL = 'https://www.omdbapi.com/?apikey=c997ccc2';
-    const response = await fetch(`${URL}&i=${id}`);
+    const URL = 'https://api.themoviedb.org/3/movie/' + id + '?api_key=458184493cc57d1740b126c2cc6f9f72&append_to_response=credits';
+    const response = await fetch(URL);
     const mymovie = await response.json();
-    console.log(mymovie);
     window.location.href = './movie.html';
-    localStorage.setItem("MOVIE", JSON.stringify([mymovie]));
+    localStorage.setItem("MOVIE", JSON.stringify(mymovie));
 }
 
 // displaying data on a movie
 function displayMovie() {
-    const movie = JSON.parse(localStorage.getItem("MOVIE")) || [];
+    const movie = JSON.parse(localStorage.getItem("MOVIE")) || {};
     count2.innerHTML = myWatchList.length;
     let str = "";
-    if (movie.length) {
-        const { Actors, Director, Genre, Language, Plot, Poster, Released, Title, Writer,imdbID } = movie[0];
-
+    if (movie) {
+        
+        const { genres, original_language, overview, backdrop_path, release_date, title, id, tagline, credits } = movie;
+  
+        // director
+        let director = "";
+        credits.crew.forEach(credit => {
+            if (credit.known_for_department == "Directing") {
+                director = credit.name;
+                return;
+            }
+        })
+        
         // for genre
         let genre = "";
-        Genre.split(",").map(item => {
-            genre += `<li>${item.trim()}</li>`
+        genres.forEach(item => {
+            genre += `<li>${item.name}</li>`
         });
-       
+
         // for Writer
-        let writers = "";
-        Writer.split(",").map(item => {
-            writers += `${item.trim()} <span class="dot" >.</span>`
+        let writers_str = "";
+        let count = 3;
+        credits.crew.forEach(credit => {
+            if (credit.known_for_department == "Writing" && count>0) {
+                writers_str += `${credit.name} <span class="dot" >.</span>`
+                count--
+            }
         });
 
         // for actors
-        let actors = "";
-        Actors.split(",").map(item => {
-            actors += `${item.trim()} <span class="dot" >.</span>`
+        let actors_str = "";
+        let first_two = 3;
+        credits.cast.map(credit => {
+            if (credit.known_for_department == "Acting" && first_two > 0) {
+                actors_str += `${credit.name} <span class="dot" >.</span>`
+                first_two--
+            }
         });
+       
+        // for producer
+        let producer = "";
+        credits.crew.forEach(credit => {
+            if (credit.known_for_department == "Production") {
+                producer = credit.name;
+                return;
+            }
+        })
 
+        // poster path
+        let src = "https://image.tmdb.org/t/p/w500" + backdrop_path;
 
         str += `
         <div class="row" id="movie">
             <div class="col-sm-6 banner">
-                <h5 class="title">${Title}</h5>
+                <h5 class="title">${title}</h5>
                 <p>
-                    <span>${Language}</span>
+                    <span>${original_language}</span>
                     <span class="dot" >.</span>
-                    <span>${Released}</span>
+                    <span>${release_date}</span>
                 </p>
                 <div class="poster">
-                    <img src=${Poster} class
+                    <img src=${src} class
                         alt="..." >
                 </div>
+                <button class="watch-btn" id=${id}>
+                    <img src="./images/video.png" />
+                    Add To Watchlist
+                </button>
             </div>
             <div class="col-sm-6 movie-data">
                 <ul class="movie-type">
                 ${genre}
                 </ul>
                 <p class="text">
-                    ${Plot}
+                    ${overview}<br/>
+                    <span>Tagline :<q>${tagline}</q></span>
                 </p>
+                
                 <hr />
                 <div class="extra-info">
                     <p class="designation">Director </p>
-                    <p class="name">${Director}</p>
+                    <p class="name">${director}</p>
                 </div>
                 <hr />
                 <div class="extra-info">
                     <p class="designation">Writers </p>
                     <p class="name">
-                        ${writers}
+                        ${writers_str}
                     </p>
                 </div>
                 <hr />
                 <div class="extra-info">
                     <p class="designation">Actors </p>
                     <p class="name">
-                        ${actors}
+                        ${actors_str}
                     </p>
                 </div>
                 <hr />
                 <div class="extra-info">
-                    <div>
-                        <img src="./images/imdbpro.png" />
-                    </div>
-                    <a href="" class="name">
-                        See production, box office & company info
-                    </a>
+                    <p class="designation">
+                        Producer
+                    </p>
+                    <p class="name">
+                        ${producer}
+                    </p>
                 </div>
-                <br/>
-                <button class="watch-btn" id=${imdbID}>
-                    <img src="./images/video.png" />
-                    Add To Watchlist
-                </button>
             </div>
         </div>
     `
@@ -113,28 +146,23 @@ function displayMovie() {
 
 displayMovie();
 
-document.addEventListener('click', (e) => {
-    // console.log(e.target)
-    if (e.target.className == "watch-btn") {
-        let id = e.target.id;
-        addWatchList();
-    }
-})
 
+// add movie to watchlist
 function addWatchList() {
+
+    const movie = JSON.parse(localStorage.getItem("MOVIE")) || {};
     
-    const movie = JSON.parse(localStorage.getItem("MOVIE")) || [];
-    console.log(movie);
     // checking if movie already in watchList
     let isPresent = false;
     myWatchList.map(item => {
-        if (item.imdbID == movie[0].imdbID) {
+        if (item.id == movie.id) {
             isPresent = true;
+            alert("Movie already in watchList");
             return;
         }
     });
     if (!isPresent) {
-        myWatchList.push(movie[0]);
+        myWatchList.push(movie);
     }
     count.innerHTML = myWatchList.length;
     count2.innerHTML = myWatchList.length;

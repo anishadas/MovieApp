@@ -22,6 +22,7 @@ body {
     margin-top: 80px;
     color: white;
     width: 100%;
+
 }
 
 /* col 1 */
@@ -42,12 +43,32 @@ body {
 }
 
 .poster {
-    height: 400px;
+    height: 350px;
 }
 
 .poster img {
     height: 100%;
-    width:95%;
+    width:100%;
+    object-fit: contain;
+}
+
+.watch-btn {
+    height: 50px;
+    padding: 5px 20px;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+    transform: scale(1);
+    transition: all 0.1s ease-in-out;
+}
+
+.watch-btn:hover {
+    background-color: black;
+    transform: scale(1.1);
+}
+
+.watch-btn img {
+    height: 100%;
     object-fit: contain;
 }
 
@@ -89,6 +110,13 @@ body {
     padding: 20px 0;
 }
 
+/* tagline */
+q {
+    font-weight: 800;
+    padding: 2px 5px;
+    text-shadow: 1x 1px 2px black;
+}
+
 .movie-data .extra-info {
     display: flex;
     align-items: center;
@@ -128,28 +156,7 @@ body {
     bottom: 4px;
 }
 
-.watch-btn {
-    height: 50px;
-    padding: 5px 20px;
-    text-align: center;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: transparent;
-    color: white;
-    transform: scale(1);
-    transition: all 0.1s ease-in-out;
-}
 
-.watch-btn:hover {
-    background-color: black;
-    transform: scale(1.1);
-}
-
-.watch-btn img {
-    height: 100%;
-    object-fit: contain;
-}
 
 
 /******************************************************* Responsive css ***********************************************/
@@ -213,6 +220,7 @@ body {
 
     .movie-data {
         padding: 0 40px;
+        padding-bottom: 50px;
     }
 
     #scroll-text {

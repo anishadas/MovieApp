@@ -2,11 +2,11 @@ let myWatchList = JSON.parse(localStorage.getItem("WATCHLIST")) || [];
 const watchlist_el = document.getElementById("my-watchlist");
 const count3 = document.getElementById("count3");
 
-// for remove button
+// event lstener for removing the movie
 document.addEventListener('click', (e) => {
     if (e.target.className == "buttn") {
         id = e.target.id;
-        removeItem(id);
+        removeMovie(id);
     }
 })
 
@@ -16,28 +16,27 @@ function displayList() {
     let str = "";
     if (myWatchList.length) {
         myWatchList.forEach(movie => {
+            let src = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path;
             str += `
               <div class="row">
                 <div class="col-sm-8 movie">
                     <div class="image">
                         <img
-                            src=${movie.Poster} />
+                            src=${src} />
                     </div>
                    <div class="info">
-                        <p class="title">${movie.Title}</p>
+                        <p class="title">${movie.title}</p>
                          <div class="type-year">
-                           
-                            <span> <p>Type: </p> ${movie.Type}</span>
                             
-                            <span><p>Year: </p>${movie.Year}</span>
+                            <span><p>Year: </p>${movie.release_date}</span>
 
-                            <button class="buttn" id=${movie.imdbID}>Remove</button>
+                            <button class="buttn" id=${movie.id}>Remove</button>
                         </div>
                         
                         <p class="rating">
                             <span class="rate">Rating:</span>
                             <i class="fa-solid fa-star"></i>
-                            7.6
+                            ${movie.vote_average}
                         </p>
                     </div>
                 </div>
@@ -60,8 +59,8 @@ displayList();
 
 
 // remove from watchlist
-function removeItem(id) {
-    myWatchList = myWatchList.filter(movie => movie.imdbID != id);
+function removeMovie(id) {
+    myWatchList = myWatchList.filter(movie => movie.id != id);
     localStorage.setItem("WATCHLIST", JSON.stringify(myWatchList));
     displayList();
 }
