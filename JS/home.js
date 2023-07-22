@@ -34,15 +34,6 @@ async function getData(query) {
 getData("")
 
 
-// function handleChangeEvent(e) {
-//     let search = e.target.value;
-//     console.log(search)
-//     getData(search);
-// }
-
-// listening change in input in search bar
-// input.addEventListener("input", handleChangeEvent);
-// listening for all click events
 document.addEventListener("click", handleClickEvents);
 
 
