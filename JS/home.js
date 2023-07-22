@@ -34,14 +34,14 @@ async function getData(query) {
 getData("")
 
 
-function handleChangeEvent(e) {
-    let search = e.target.value;
-    console.log(search)
-    getData(search);
-}
+// function handleChangeEvent(e) {
+//     let search = e.target.value;
+//     console.log(search)
+//     getData(search);
+// }
 
 // listening change in input in search bar
-input.addEventListener("input", handleChangeEvent);
+// input.addEventListener("input", handleChangeEvent);
 // listening for all click events
 document.addEventListener("click", handleClickEvents);
 
@@ -49,7 +49,12 @@ document.addEventListener("click", handleClickEvents);
 
 
 function handleClickEvents(e) {
-    console.log(e.target)
+    // console.log(e.target)
+    if (e.target.className == "btn btn-outline-warning") {
+        e.preventDefault();
+        let search = input.value;
+        getData(search);
+    }
     if (e.target.className == "add-watchlist") {
         e.preventDefault();
         let id = e.target.id;
@@ -64,6 +69,7 @@ function handleClickEvents(e) {
         showMovie(id);
 
     }
+
 }
 
 // dsplaying the UI
@@ -98,7 +104,13 @@ function renderMovies() {
                     </button>`
             }
 
-            let src = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path;
+            let src = "";
+            if (movie.backdrop_path == null) {
+                src='./images/noimage.jpg'
+            } else {
+                src = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path;   
+            }
+            
             str += `
             <div class="card" style="width: 18rem;">
                 <div class="image">
